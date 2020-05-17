@@ -4,3 +4,4 @@ Some stuff to add:
 * unicode support
 * floats etc as number input
 * postfix operators (e.g. val++)
+* differeing left-right associativity?
