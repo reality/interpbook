@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/user"
-	"repl"
+	"reality.rehab/interp/repl"
 )
 
 func main() {

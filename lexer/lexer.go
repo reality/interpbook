@@ -1,7 +1,7 @@
 // lexer/lexer.go
 package lexer
 
-import "token"
+import "reality.rehab/interp/token"
 
 type Lexer struct {
 	input        string
