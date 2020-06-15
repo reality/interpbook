@@ -5,3 +5,6 @@ Some stuff to add:
 * floats etc as number input
 * postfix operators (e.g. val++)
 * differeing left-right associativity?
+
+* idea auto-api dsl?
+* owl..?
