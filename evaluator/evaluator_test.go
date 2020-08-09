@@ -186,6 +186,7 @@ func TestErrorHandling(t *testing.T) {
 		{"if (10 > 1) { if(10 > 1) { true + false; } return 1; }", "unknown operator: BOOLEAN + BOOLEAN"},
 		{"foobar", "identifier not found: foobar"},
 		{`"Hello" - "World"`, "unknown operator: STRING - STRING"},
+		{`{"name": "Monkey"}[fn(x) { x }]`, "unusable as hash key: FUNCTION"},
 	}
 
 	for _, tt := range tests {
@@ -341,13 +342,13 @@ func TestArrayLiterals(t *testing.T) {
 		t.Fatalf("object is not Array. got=%T (%+v)", evaluated, evaluated)
 	}
 
-	if len(result.Elements) != 2 {
+	if len(result.Elements) != 3 {
 		t.Fatalf("array has wrong num of elements. got=%d", len(result.Elements))
 	}
 
 	testIntegerObject(t, result.Elements[0], 1)
-	testIntegerObject(t, result.Elements[0], 4)
-	testIntegerObject(t, result.Elements[0], 6)
+	testIntegerObject(t, result.Elements[1], 4)
+	testIntegerObject(t, result.Elements[2], 6)
 }
 
 func TestArrayINdexExpressions(t *testing.T) {
@@ -434,5 +435,30 @@ func TestHashLiterals(t *testing.T) {
 			t.Errorf("no pair for given key in Pairs")
 		}
 		testIntegerObject(t, pair.Value, expectedValue)
+	}
+}
+
+func TestHashIndexExpressions(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{`{"foo": 5}["foo"]`, 5},
+		{`{"foo": 5}["bar"]`, nil},
+		{`let key = "foo"; {"foo": 5}[key]`, 5},
+		{`{}["foo"]`, nil},
+		{`{5: 5}[5]`, 5},
+		{`{true: 5}[true]`, 5},
+		{`{false: 5}[false]`, 5},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		integer, ok := tt.expected.(int)
+		if ok {
+			testIntegerObject(t, evaluated, int64(integer))
+		} else {
+			testNullObject(t, evaluated)
+		}
 	}
 }
