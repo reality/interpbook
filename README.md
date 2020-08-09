@@ -15,3 +15,5 @@ ideas:
 * mess with closure return logic
 * one line closures?
 * tsv transform lang?
+* change built in function to return list of return values if multiple args
+* -1 index accessor
